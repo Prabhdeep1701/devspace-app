@@ -1,5 +1,5 @@
-import { auth, currentUser } from "@clerk/nextjs/server"
-import { type NextRequest, NextResponse } from "next/server"
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 // In-memory storage for demo purposes
 const hackathons: any[] = [
@@ -14,25 +14,25 @@ const hackathons: any[] = [
     eligibility: "Open to all developers",
     rules: "Teams of 2-4 members, original code only",
     organizerId: "demo-organizer",
-    participants: [],
+    participants: ["!"],
     teams: [],
     submissions: [],
   },
-]
+];
 
 export async function GET() {
-  return NextResponse.json(hackathons)
+  return NextResponse.json(hackathons);
 }
 
 export async function POST(request: NextRequest) {
-  const { userId } = await auth()
-  const user = await currentUser()
+  const { userId } = await auth();
+  const user = await currentUser();
 
   if (!userId || user?.publicMetadata?.role !== "organizer") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const hackathonData = await request.json()
+  const hackathonData = await request.json();
 
   const newHackathon = {
     id: Date.now().toString(),
@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
     participants: [],
     teams: [],
     submissions: [],
-  }
+  };
 
-  hackathons.push(newHackathon)
+  hackathons.push(newHackathon);
 
-  return NextResponse.json(newHackathon)
+  return NextResponse.json(newHackathon);
 }
